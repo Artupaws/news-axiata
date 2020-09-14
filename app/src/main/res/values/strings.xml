@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">News Axiata</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    //api key
+    <string name="api_key">"357c683838a746109ba2b6f718d5455f"</string>
+    <string name="top_headlines_usa">Top Headlines USA</string>
+    <string name="search_more_article"><![CDATA[Search more article >>]]></string>
+    <string name="business">Business</string>
+    <string name="entertainment">Entertainment</string>
+    <string name="general">General</string>
+    <string name="health">Health</string>
+    <string name="science">Science</string>
+    <string name="sports">Sports</string>
+    <string name="technology">Technology</string>
+    <string name="categories">Categories</string>
+</resources>
