@@ -3,6 +3,8 @@ package com.example.newsaxiata.view;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -12,17 +14,21 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.newsaxiata.R;
+import com.example.newsaxiata.model.Article;
 import com.example.newsaxiata.model.Source;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class AdapterCategory extends RecyclerView.Adapter<AdapterCategory.ViewHolder> {
+public class AdapterCategory extends RecyclerView.Adapter<AdapterCategory.ViewHolder> implements Filterable {
 
     private List<Source> sourceList;
+    private List<Source> filterList;
     private FragmentActivity activity;
 
-    public AdapterCategory(FragmentActivity activity, List<Source> sourceList) {
+    public AdapterCategory(List<Source> sourceList, FragmentActivity activity) {
         this.sourceList = sourceList;
+        this.filterList = sourceList;
         this.activity = activity;
     }
 
@@ -53,7 +59,45 @@ public class AdapterCategory extends RecyclerView.Adapter<AdapterCategory.ViewHo
 
     @Override
     public int getItemCount() {
-        return sourceList.size();
+        return filterList.size();
+    }
+
+    public void setSourceList(List<Source> sourceList){
+        this.sourceList = sourceList;
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+                String charString = charSequence.toString();
+                if (charString.isEmpty()) {
+                    filterList = sourceList;
+                } else {
+                    ArrayList<Source> result = new ArrayList<>();
+                    for (Source row : sourceList) {
+                        if (row.getName().toLowerCase().contains(charString)) {
+                            result.add(row);
+                        }
+                    }
+                    filterList.clear();
+                    filterList.addAll(result);
+                }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.count = sourceList.size();
+                filterResults.values = sourceList;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                sourceList = (ArrayList<Source>) filterResults.values;
+                notifyDataSetChanged();
+            }
+        };
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

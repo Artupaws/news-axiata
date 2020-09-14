@@ -1,7 +1,9 @@
 package com.example.newsaxiata.api;
 
+import com.example.newsaxiata.model.Article;
 import com.example.newsaxiata.model.News;
-import com.example.newsaxiata.model.Source;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

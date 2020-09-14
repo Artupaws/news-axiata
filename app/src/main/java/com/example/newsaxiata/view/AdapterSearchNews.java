@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -35,35 +36,40 @@ public class AdapterSearchNews extends RecyclerView.Adapter<AdapterSearchNews.Vi
 
     @NonNull
     @Override
-    public AdapterSearchNews.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_news, parent, false);
-
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final AdapterSearchNews.ViewHolder holder, int position) {
-        final Article articles = filterList.get(position);
+    public void onBindViewHolder(@NonNull final ViewHolder viewHolder, int position) {
+        Article articles = articleList.get(position);
 
-        holder.tv_title.setText(articles.getTitle());
-        holder.tv_desc.setText(articles.getDescription());
-        holder.tv_date.setText(articles.getPublishedAt());
+        viewHolder.tv_title.setText(articles.getTitle());
+        viewHolder.tv_desc.setText(articles.getDescription());
+        viewHolder.tv_date.setText(articles.getPublishedAt());
         Glide.with(context).load(articles.getUrlToImage())
-                .into(holder.image_news);
-        holder.tv_url.setText(articles.getUrl());
-        holder.parent_layout.setOnClickListener(new View.OnClickListener() {
+                .into(viewHolder.image_news);
+        viewHolder.tv_url.setText(articles.getUrl());
+        viewHolder.parent_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ListNewsHeadlinesFragmentDirections.ActionListNewFragmentToWebViewFragment action = ListNewsHeadlinesFragmentDirections.actionListNewFragmentToWebViewFragment();
-                action.setWebUrl(holder.tv_url.getText().toString());
-                Navigation.findNavController(holder.parent_layout).navigate(action);
+                SearchArticleFragmentDirections.ActionSearchArticleFragmentToWebViewFragment action = SearchArticleFragmentDirections.actionSearchArticleFragmentToWebViewFragment();
+                action.setWebUrl(viewHolder.tv_url.getText().toString());
+                Navigation.findNavController(viewHolder.parent_layout).navigate(action);
             }
         });
+
     }
 
     @Override
     public int getItemCount() {
         return filterList.size();
+    }
+
+    public void setArticleList(List<Article> articleList) {
+        this.articleList = articleList;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -72,12 +78,12 @@ public class AdapterSearchNews extends RecyclerView.Adapter<AdapterSearchNews.Vi
             @Override
             protected FilterResults performFiltering(CharSequence charSequence) {
                 String charString = charSequence.toString();
-                if (charString.isEmpty()){
+                if (charString.isEmpty()) {
                     filterList = articleList;
                 } else {
                     ArrayList<Article> result = new ArrayList<>();
-                    for (Article row : articleList){
-                        if (row.getTitle().toLowerCase().contains(charString)){
+                    for (Article row : articleList) {
+                        if (row.getTitle().toLowerCase().contains(charString)) {
                             result.add(row);
                         }
                     }
@@ -103,6 +109,9 @@ public class AdapterSearchNews extends RecyclerView.Adapter<AdapterSearchNews.Vi
         private TextView tv_date, tv_title, tv_desc, tv_url;
         private ImageView image_news;
         private ConstraintLayout parent_layout;
+        private ProgressBar progressBar;
+
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tv_date = itemView.findViewById(R.id.tv_date);
@@ -111,6 +120,7 @@ public class AdapterSearchNews extends RecyclerView.Adapter<AdapterSearchNews.Vi
             image_news = itemView.findViewById(R.id.image_news);
             tv_url = itemView.findViewById(R.id.tv_url);
             parent_layout = itemView.findViewById(R.id.parent_layout);
+            progressBar = itemView.findViewById(R.id.progressBar);
         }
     }
 }

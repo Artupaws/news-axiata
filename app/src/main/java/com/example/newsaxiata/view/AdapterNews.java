@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.newsaxiata.R;
 import com.example.newsaxiata.model.Article;
+import com.example.newsaxiata.model.News;
 
 import java.util.List;
 
@@ -41,14 +42,12 @@ public class AdapterNews extends RecyclerView.Adapter<AdapterNews.ViewHolder>  {
 
     @Override
     public void onBindViewHolder(@NonNull final AdapterNews.ViewHolder holder, int position) {
-        Article articles = articleList.get(position);
-
-        holder.tv_title.setText(articles.getTitle());
-        holder.tv_desc.setText(articles.getDescription());
-        holder.tv_date.setText(articles.getPublishedAt());
-        Glide.with(context).load(articles.getUrlToImage())
+        holder.tv_title.setText(articleList.get(position).getTitle());
+        holder.tv_desc.setText(articleList.get(position).getDescription());
+        holder.tv_date.setText(articleList.get(position).getPublishedAt());
+        Glide.with(context).load(articleList.get(position).getUrlToImage())
                 .into(holder.image_news);
-        holder.tv_url.setText(articles.getUrl());
+        holder.tv_url.setText(articleList.get(position).getUrl());
         holder.parent_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -62,6 +61,11 @@ public class AdapterNews extends RecyclerView.Adapter<AdapterNews.ViewHolder>  {
     @Override
     public int getItemCount() {
         return articleList.size();
+    }
+
+    public void setArticleList(List<Article> articleList){
+        this.articleList = articleList;
+        notifyDataSetChanged();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

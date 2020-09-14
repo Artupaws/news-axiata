@@ -6,7 +6,7 @@
     //api key
     <string name="api_key">"357c683838a746109ba2b6f718d5455f"</string>
     <string name="top_headlines_usa">Top Headlines USA</string>
-    <string name="search_more_article"><![CDATA[Search more article >>]]></string>
+    <string name="search_more_article">Feature Search Here</string>
     <string name="business">Business</string>
     <string name="entertainment">Entertainment</string>
     <string name="general">General</string>

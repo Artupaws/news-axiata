@@ -10,13 +10,19 @@
         android:label="ListNewFragment" >
         <action
             android:id="@+id/action_listNewFragment_to_listCategoryFragment"
-            app:destination="@id/listCategoryFragment"/>
+            app:destination="@id/listCategoryFragment"
+            app:enterAnim="@anim/fragment_fade_enter"
+            app:exitAnim="@anim/fragment_fade_exit" />
         <action
             android:id="@+id/action_listNewFragment_to_webViewFragment"
-            app:destination="@id/webViewFragment" />
+            app:destination="@id/webViewFragment"
+            app:enterAnim="@anim/fragment_fade_enter"
+            app:exitAnim="@anim/fragment_fade_exit" />
         <action
             android:id="@+id/action_listNewFragment_to_searchArticleFragment"
-            app:destination="@id/searchArticleFragment" />
+            app:destination="@id/searchArticleFragment"
+            app:enterAnim="@anim/fragment_fade_enter"
+            app:exitAnim="@anim/fragment_fade_exit" />
     </fragment>
     <fragment
         android:id="@+id/listCategoryFragment"
@@ -24,14 +30,18 @@
         android:label="ListCategoryFragment" >
         <action
             android:id="@+id/action_listCategoryFragment_to_listNewFragment"
-            app:destination="@id/listNewFragment" />
+            app:destination="@id/listNewFragment"
+            app:enterAnim="@anim/fragment_fade_enter"
+            app:exitAnim="@anim/fragment_fade_exit" />
         <argument
             android:name="category"
             app:argType="string"
             android:defaultValue="default" />
         <action
             android:id="@+id/action_listCategoryFragment_to_webViewFragment"
-            app:destination="@id/webViewFragment" />
+            app:destination="@id/webViewFragment"
+            app:enterAnim="@anim/fragment_fade_enter"
+            app:exitAnim="@anim/fragment_fade_exit" />
     </fragment>
     <fragment
         android:id="@+id/webViewFragment"
@@ -44,10 +54,19 @@
             android:defaultValue="default" />
         <action
             android:id="@+id/action_webViewFragment_to_listCategoryFragment"
-            app:destination="@id/listCategoryFragment" />
+            app:destination="@id/listCategoryFragment"
+            app:enterAnim="@anim/fragment_fade_enter"
+            app:exitAnim="@anim/fragment_fade_exit" />
         <action
             android:id="@+id/action_webViewFragment_to_listNewFragment"
-            app:destination="@id/listNewFragment" />
+            app:destination="@id/listNewFragment"
+            app:enterAnim="@anim/fragment_fade_enter"
+            app:exitAnim="@anim/fragment_fade_exit" />
+        <action
+            android:id="@+id/action_webViewFragment_to_searchArticleFragment"
+            app:destination="@id/searchArticleFragment"
+            app:enterAnim="@anim/fragment_fade_enter"
+            app:exitAnim="@anim/fragment_fade_exit" />
     </fragment>
     <fragment
         android:id="@+id/searchArticleFragment"
@@ -56,5 +75,10 @@
         <action
             android:id="@+id/action_searchArticleFragment_to_listNewFragment"
             app:destination="@id/listNewFragment" />
+        <action
+            android:id="@+id/action_searchArticleFragment_to_webViewFragment"
+            app:destination="@id/webViewFragment"
+            app:enterAnim="@anim/fragment_fade_enter"
+            app:exitAnim="@anim/fragment_fade_exit" />
     </fragment>
 </navigation>

@@ -2,8 +2,9 @@ package com.example.newsaxiata.view;
 
 import android.os.Bundle;
 
-import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -11,40 +12,41 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.example.newsaxiata.R;
-import com.example.newsaxiata.api.Api;
-import com.example.newsaxiata.api.Client;
 import com.example.newsaxiata.databinding.FragmentListNewsHeadlinesBinding;
 import com.example.newsaxiata.model.Article;
 import com.example.newsaxiata.model.News;
 import com.example.newsaxiata.viewmmodel.ViewModelNews;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class ListNewsHeadlinesFragment extends Fragment implements View.OnClickListener{
 
+    ViewModelNews viewModelNews;
     FragmentListNewsHeadlinesBinding binding;
-    public static String API_KEY ="";
-    RecyclerView.LayoutManager layoutManager;
-    private List<Article> articleList = new ArrayList<>();
     private AdapterNews adapterNews;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentListNewsHeadlinesBinding.inflate(getLayoutInflater());
-        API_KEY = getActivity().getResources().getString(R.string.api_key);
 
-        layoutManager = new LinearLayoutManager(getActivity());
-        binding.recyclerNew.setLayoutManager(layoutManager);
-        binding.recyclerNew.setAdapter(adapterNews);
+        //viewModel init
+        viewModelNews = ViewModelProviders.of(this).get(ViewModelNews.class);
+        viewModelNews.getNews();
+
+        viewModelNews.listMutableLiveData.observe(getActivity(), new Observer<List<Article>>() {
+            @Override
+            public void onChanged(List<Article> articleList) {
+                adapterNews = new AdapterNews(articleList, getActivity());
+                binding.recyclerNew.setLayoutManager(new LinearLayoutManager(getActivity()));
+                binding.recyclerNew.setAdapter(adapterNews);
+                adapterNews.setArticleList(articleList);
+                adapterNews.notifyDataSetChanged();
+            }
+        });
+
         binding.cvBusiness.setOnClickListener(this);
         binding.cvEntertainment.setOnClickListener(this);
         binding.cvGeneral.setOnClickListener(this);
@@ -54,37 +56,7 @@ public class ListNewsHeadlinesFragment extends Fragment implements View.OnClickL
         binding.cvTechnology.setOnClickListener(this);
         binding.tvSearch.setOnClickListener(this);
 
-        loadArticle();
         return binding.getRoot();
-    }
-
-
-    public void loadArticle(){
-        Api api = Client.getClient().create(Api.class);
-        String country = "us";
-        Call<News> call;
-        call = api.getNews(country, API_KEY);
-        call.enqueue(new Callback<News>() {
-            @Override
-            public void onResponse(Call<News> call, Response<News> response) {
-                if (response.isSuccessful() && response.body().getArticles() != null){
-                    if (!articleList.isEmpty()){
-                        articleList.clear();
-                    }
-                    articleList = response.body().getArticles();
-                    adapterNews = new AdapterNews(articleList, getActivity());
-                    binding.recyclerNew.setAdapter(adapterNews);
-                    adapterNews.notifyDataSetChanged();
-                } else {
-                    Toast.makeText(getActivity(), "No Result!", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<News> call, Throwable t) {
-
-            }
-        });
     }
 
     @Override
